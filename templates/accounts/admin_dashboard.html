@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin dashboard</h1>
+<ul>
+  <li>Registered users: {{ users_count }}</li>
+  <li>Bookings: {{ bookings_count }}</li>
+  <li>Subscribers: {{ subscribers_count }}</li>
+  <li>Contact queries: {{ queries_count }}</li>
+</ul>
+<a href="{% url 'accounts:admin_user_list' %}">Registered users</a>
+<a href="{% url 'accounts:admin_password_change' %}">Change password</a>
+<form method="post" action="{% url 'accounts:admin_logout' %}">{% csrf_token %}<button>Log out</button></form>
+{% endblock %}
