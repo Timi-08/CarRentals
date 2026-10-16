@@ -12,7 +12,6 @@ class TestCase(DjangoTestCase):
 PASSWORD = 'Str0ng-Pass!234'
 NEW_PASSWORD = 'An0ther-Str0ng!567'
 
-
 def registration_data(**overrides):
     """Valid registration form data; override any field per test."""
     data = {
@@ -65,7 +64,7 @@ class RegistrationTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response.context['form'], 'email',
-                             'An account with this email already exists.')
+                                'An account with this email already exists.')
         self.assertFalse(User.objects.filter(username='timi').exists())
         self.assertFalse(is_logged_in(self.client))
 
