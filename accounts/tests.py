@@ -1,7 +1,9 @@
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import User
+from django.core import mail
 from django.test import TestCase as DjangoTestCase, override_settings
 from django.urls import reverse
+from urllib.parse import urlsplit
 
 from .models import Profile
 
@@ -243,6 +245,15 @@ class ProfileTests(TestCase):
         self.assertEqual(response.context['p_form'].instance, self.user.profile)
         self.assertContains(response, 'timi@example.com')
 
+    def test_edit_page_creates_a_missing_profile(self):
+        Profile.objects.filter(user=self.user).delete()
+
+        response = self.client.get(reverse('accounts:profile_edit'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Profile.objects.filter(user=self.user).count(), 1)
+        self.assertEqual(response.context['p_form'].instance.user, self.user)
+
     def test_user_can_update_their_profile(self):
         response = self.client.post(reverse('accounts:profile_edit'), {
             'first_name': 'Timilehin',
@@ -353,6 +364,37 @@ class PasswordChangeTests(TestCase):
         self.assertIn('new_password2', response.context['form'].errors)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(PASSWORD))
+
+
+@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+class PasswordResetTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('timi', 'timi@example.com', PASSWORD)
+
+    def test_user_can_reset_password_from_email_link(self):
+        response = self.client.post(reverse('accounts:password_reset'), {
+            'email': self.user.email,
+        })
+
+        self.assertRedirects(response, reverse('accounts:password_reset_done'))
+        self.assertEqual(len(mail.outbox), 1)
+        reset_url = next(line for line in mail.outbox[0].body.splitlines()
+                         if line.startswith('http://'))
+        reset_path = urlsplit(reset_url).path
+        response = self.client.get(reset_path)
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.get(response.url)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(response.request['PATH_INFO'], {
+            'new_password1': NEW_PASSWORD,
+            'new_password2': NEW_PASSWORD,
+        })
+
+        self.assertRedirects(response, reverse('accounts:password_reset_complete'))
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(NEW_PASSWORD))
 
 
 class AdminAccessTests(TestCase):
