@@ -7,4 +7,12 @@
 {% empty %}
   <p>No testimonials yet.</p>
 {% endfor %}
+
+{% if testimonials.has_other_pages %}
+<p>
+  {% if testimonials.has_previous %}<a href="?page={{ testimonials.previous_page_number }}">Previous</a>{% endif %}
+  Page {{ testimonials.number }} of {{ testimonials.paginator.num_pages }}
+  {% if testimonials.has_next %}<a href="?page={{ testimonials.next_page_number }}">Next</a>{% endif %}
+</p>
+{% endif %}
 {% endblock %}

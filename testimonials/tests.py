@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .models import Testimonial
 
 
+# Faster password hashing, for tests only
+@override_settings(PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'])
 class TestimonialTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('alice', password='pass12345!')
@@ -39,3 +41,10 @@ class TestimonialTests(TestCase):
         self.client.post(url, {'action': 'deactivate', '_selected_action': [t.pk]})
         t.refresh_from_db()
         self.assertFalse(t.is_active)
+
+    def test_list_is_paginated(self):  # NFR-04
+        for i in range(8):
+            Testimonial.objects.create(user=self.user, message=f'Review {i}', is_active=True)
+        url = reverse('testimonials:list')
+        self.assertEqual(len(self.client.get(url).context['testimonials']), 6)
+        self.assertEqual(len(self.client.get(url + '?page=2').context['testimonials']), 2)

@@ -32,6 +32,13 @@ class Booking(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        constraints = [
+            # Database-level rule (NFR-06): return date must be after pickup date
+            models.CheckConstraint(
+                condition=models.Q(return_date__gt=models.F('pickup_date')),
+                name='booking_return_after_pickup',
+            ),
+        ]
 
     def __str__(self):
         return f"{self.customer} - {self.vehicle} ({self.pickup_date} to {self.return_date})"

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from .forms import TestimonialForm
@@ -7,9 +8,10 @@ from .models import Testimonial
 
 
 def testimonial_list(request):
-    """Anyone can view active testimonials only (TST-02)."""
-    testimonials = Testimonial.objects.filter(is_active=True)
-    return render(request, 'testimonials/list.html', {'testimonials': testimonials})
+    """Anyone can view active testimonials only (TST-02), paginated (NFR-04)."""
+    qs = Testimonial.objects.filter(is_active=True).select_related('user')
+    page_obj = Paginator(qs, 6).get_page(request.GET.get('page'))
+    return render(request, 'testimonials/list.html', {'testimonials': page_obj})
 
 
 @login_required
