@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -34,9 +35,10 @@ def booking_confirmation(request, pk):
 
 @login_required
 def my_bookings(request):
-    """BKG-10: a customer sees only their own bookings."""
-    bookings = Booking.objects.filter(customer=request.user).select_related('vehicle')
-    return render(request, 'bookings/my_bookings.html', {'bookings': bookings})
+    """BKG-10: a customer sees only their own bookings (paginated, NFR-04)."""
+    qs = Booking.objects.filter(customer=request.user).select_related('vehicle')
+    page_obj = Paginator(qs, 10).get_page(request.GET.get('page'))
+    return render(request, 'bookings/my_bookings.html', {'bookings': page_obj})
 
 
 @login_required
@@ -56,12 +58,15 @@ def cancel_booking(request, pk):
 @staff_member_required(login_url='accounts:admin_login')
 def manage_bookings(request):
     """BKG-11: admin sees all bookings, optionally filtered by status."""
-    bookings = Booking.objects.select_related('customer', 'vehicle')
+    qs = Booking.objects.select_related('customer', 'vehicle')
     status = request.GET.get('status')
     if status in (Booking.PENDING, Booking.CONFIRMED, Booking.CANCELLED):
-        bookings = bookings.filter(status=status)
+        qs = qs.filter(status=status)
+    else:
+        status = None
+    page_obj = Paginator(qs, 10).get_page(request.GET.get('page'))
     return render(request, 'bookings/manage.html',
-                  {'bookings': bookings, 'current_status': status})
+                  {'bookings': page_obj, 'current_status': status})
 
 
 @staff_member_required(login_url='accounts:admin_login')

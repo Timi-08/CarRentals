@@ -30,4 +30,12 @@
   <tr><td colspan="8">No bookings.</td></tr>
   {% endfor %}
 </table>
+
+{% if bookings.has_other_pages %}
+<p>
+  {% if bookings.has_previous %}<a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ bookings.previous_page_number }}">Previous</a>{% endif %}
+  Page {{ bookings.number }} of {{ bookings.paginator.num_pages }}
+  {% if bookings.has_next %}<a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ bookings.next_page_number }}">Next</a>{% endif %}
+</p>
+{% endif %}
 {% endblock %}
