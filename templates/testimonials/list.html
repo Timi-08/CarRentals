@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Testimonials</h1>
+<a href="{% url 'testimonials:create' %}">Write a testimonial</a>
+{% for t in testimonials %}
+  <blockquote>{{ t.message }}<footer>- {{ t.user.get_full_name|default:t.user.username }}</footer></blockquote>
+{% empty %}
+  <p>No testimonials yet.</p>
+{% endfor %}
+{% endblock %}
