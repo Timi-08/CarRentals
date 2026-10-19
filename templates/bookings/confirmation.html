@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Booking received</h1>
+<p>Booking #{{ booking.pk }} for <strong>{{ booking.vehicle }}</strong></p>
+<p>Pickup: {{ booking.pickup_date }} | Return: {{ booking.return_date }}</p>
+<p>Location: {{ booking.location }}</p>
+<p>Days: {{ booking.days }} | Total: {{ booking.total_price }}</p>
+<p>Status: {{ booking.status }}</p>
+<a href="{% url 'bookings:my_bookings' %}">View my bookings</a>
+{% endblock %}
