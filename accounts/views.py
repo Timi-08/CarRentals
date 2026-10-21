@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 
 def register(request):
     if request.user.is_authenticated:
@@ -39,7 +40,8 @@ def profile(request):
 @login_required
 def profile_edit(request):
     u_form = UserUpdateForm(request.POST or None, instance=request.user)
-    p_form = ProfileUpdateForm(request.POST or None, instance=request.user.profile)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    p_form = ProfileUpdateForm(request.POST or None, instance=profile)
     if request.method == 'POST' and u_form.is_valid() and p_form.is_valid():
         u_form.save()
         p_form.save()
