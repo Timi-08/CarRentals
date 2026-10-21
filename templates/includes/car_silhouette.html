@@ -1,0 +1,34 @@
+{% comment %}
+  A generic car drawn in SVG. Used on the home hero and as the picture for any vehicle that has no uploaded image.
+  Usage: include "includes/car_silhouette.html"
+         include "includes/car_silhouette.html" with spin=True    (wheels turn; used in the hero)
+  All colours come from the CSS variables in style.css.
+{% endcomment %}
+<svg class="fc-car{% if spin %} fc-car--spin{% endif %}" viewBox="0 0 640 240" role="img" aria-label="Illustration of a car">
+  <ellipse class="car-ground" cx="320" cy="228" rx="290" ry="8"/>
+  {# body #}
+  <path class="car-body" d="M16 170 C16 152 24 144 44 140 L128 126 C160 94 204 72 262 68 L372 68 C428 70 470 94 506 124 L590 134 C614 138 626 150 626 170 L626 178 C626 184 620 188 612 188 L30 188 C22 188 16 184 16 178 Z"/>
+  {# windows #}
+  <path class="car-glass" d="M160 124 C184 96 218 82 262 80 L318 80 L318 124 Z"/>
+  <path class="car-glass" d="M332 80 L372 80 C414 82 446 102 474 124 L332 124 Z"/>
+  {# character line #}
+  <path class="car-line" d="M52 152 C200 144 420 144 596 152"/>
+  {# lights #}
+  <path class="car-light-f" d="M598 142 L622 148 L622 158 L594 154 Z"/>
+  <rect class="car-light-r" x="16" y="148" width="11" height="16" rx="3"/>
+  {# wheel arches #}
+  <path class="car-arch" d="M92 190 A52 52 0 0 1 196 190"/>
+  <path class="car-arch" d="M444 190 A52 52 0 0 1 548 190"/>
+  {# rear wheel #}
+  <g class="car-wheel">
+    <circle class="car-tyre" cx="144" cy="190" r="40"/>
+    <circle class="car-rim" cx="144" cy="190" r="24"/>
+    <path class="car-spoke" d="M144 166V214M120 190H168M127 173L161 207M161 173L127 207"/>
+  </g>
+  {# front wheel #}
+  <g class="car-wheel">
+    <circle class="car-tyre" cx="496" cy="190" r="40"/>
+    <circle class="car-rim" cx="496" cy="190" r="24"/>
+    <path class="car-spoke" d="M496 166V214M472 190H520M479 173L513 207M513 173L479 207"/>
+  </g>
+</svg>

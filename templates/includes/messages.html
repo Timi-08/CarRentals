@@ -1,10 +1,10 @@
 {% comment %}
-  Shows Django messages as Bootstrap alerts (UI-07).
-  settings.py maps messages.ERROR to 'danger', so message.tags is a valid Bootstrap colour:
-  success, info, warning, danger.
+  Shows Django messages as floating toasts in the top-right corner (UI-07).
+  They do not push the page down. settings.py maps messages.ERROR to 'danger',
+  so message.tags is a valid Bootstrap colour: success, info, warning, danger.
 {% endcomment %}
 {% if messages %}
-  <div class="container mt-3" id="message-area">
+  <div class="fc-toasts" id="message-area">
     {% for message in messages %}
       <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
         {{ message }}

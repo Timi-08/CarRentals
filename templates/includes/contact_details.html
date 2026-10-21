@@ -6,9 +6,9 @@
   Without it, placeholder text is shown.
 {% endcomment %}
 <aside class="fc-contact-card">
-  <h2 class="h5 mb-3">Contact us</h2>
-  <p class="mb-2"><i class="bi bi-geo-alt text-accent"></i> {{ contact.address|default:"Address coming soon" }}</p>
-  <p class="mb-2"><i class="bi bi-telephone text-accent"></i> {{ contact.phone|default:"Phone number coming soon" }}</p>
-  <p class="mb-2"><i class="bi bi-envelope text-accent"></i> {{ contact.email|default:"Email coming soon" }}</p>
-  <p class="mb-0"><i class="bi bi-clock text-accent"></i> {{ contact.hours|default:"Open every day" }}</p>
+  <h2 class="h5 mb-4">Contact us</h2>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-geo-alt text-accent"></i> <span>{{ contact.address|default:"Address coming soon" }}</span></p>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-telephone text-accent"></i> <span>{{ contact.phone|default:"Phone number coming soon" }}</span></p>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-envelope text-accent"></i> <span>{{ contact.email|default:"Email coming soon" }}</span></p>
+  <p class="mb-0 d-flex align-items-center"><i class="bi bi-clock text-accent"></i> <span>{{ contact.hours|default:"Open every day" }}</span></p>
 </aside>

@@ -2,9 +2,11 @@
 {% block title %}{{ title }} | FAST CARS{% endblock %}
 
 {% block content %}
-<div class="auth-card text-center">
-  <h1 class="h3 mb-3">{{ title }}</h1>
-  <p class="mb-4">{{ message }}</p>
-  <a class="btn btn-fc-primary" href="{% url 'accounts:login' %}">Log in</a>
+<div class="fc-auth-stage">
+  <div class="auth-card text-center">
+    <h1 class="h3 mb-3">{{ title }}</h1>
+    <p class="mb-4">{{ message }}</p>
+    <a class="btn btn-fc-primary" href="{% url 'login' %}">Log in</a>
+  </div>
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {# Shared footer #}
-<footer class="fc-footer mt-5 py-4">
+<footer class="fc-footer">
   <div class="container">
-    <div class="row gy-3">
+    <div class="row gy-4">
       <div class="col-md-5">
         <h5 class="fw-bold mb-2">FAST <span class="text-accent">CARS</span></h5>
         <p class="small mb-3">Find, book and track your rental car online, any time of day.</p>
@@ -35,15 +35,15 @@
         <h6 class="text-uppercase small fw-semibold">Account</h6>
         <ul class="list-unstyled small mb-0">
           {% if user.is_authenticated %}
-            <li><a href="{% url 'accounts:profile' %}">My profile</a></li>
+            <li><a href="{% url 'profile' %}">My profile</a></li>
           {% else %}
-            <li><a href="{% url 'accounts:login' %}">Log in</a></li>
-            <li><a href="{% url 'accounts:register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Log in</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
           {% endif %}
         </ul>
       </div>
     </div>
-    <hr class="border-secondary my-3">
+    <hr class="border-secondary my-4">
     <p class="small mb-0 text-center">&copy; {% now "Y" %} FAST CARS. All rights reserved.</p>
   </div>
 </footer>
