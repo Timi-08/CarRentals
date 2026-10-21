@@ -1,0 +1,49 @@
+{# Shared footer #}
+<footer class="fc-footer mt-5 py-4">
+  <div class="container">
+    <div class="row gy-3">
+      <div class="col-md-5">
+        <h5 class="fw-bold mb-2">FAST <span class="text-accent">CARS</span></h5>
+        <p class="small mb-3">Find, book and track your rental car online, any time of day.</p>
+
+        {% comment %}
+          Subscribe form (CON-03). It posts to the URL named 'contact:subscribe' once Isreal adds it.
+          Until that URL exists, the box is shown but disabled.
+        {% endcomment %}
+        {% url 'contact:subscribe' as subscribe_url %}
+        <form method="post" action="{{ subscribe_url }}" class="fc-subscribe">
+          {% csrf_token %}
+          <label for="subscribe-email" class="small fw-semibold mb-1">Get news and offers</label>
+          <div class="input-group input-group-sm">
+            <input type="email" name="email" id="subscribe-email" class="form-control"
+                   placeholder="Your email address" required {% if not subscribe_url %}disabled{% endif %}>
+            <button class="btn btn-fc-primary" type="submit" {% if not subscribe_url %}disabled{% endif %}>Subscribe</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6 class="text-uppercase small fw-semibold">Explore</h6>
+        <ul class="list-unstyled small mb-0">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="/vehicles/">Cars</a></li>
+          <li><a href="/testimonials/">Testimonials</a></li>
+          {% url 'about' as about_url %}{% if about_url %}<li><a href="{{ about_url }}">About us</a></li>{% endif %}
+          <li><a href="/contact/">Contact us</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-4">
+        <h6 class="text-uppercase small fw-semibold">Account</h6>
+        <ul class="list-unstyled small mb-0">
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'accounts:profile' %}">My profile</a></li>
+          {% else %}
+            <li><a href="{% url 'accounts:login' %}">Log in</a></li>
+            <li><a href="{% url 'accounts:register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <hr class="border-secondary my-3">
+    <p class="small mb-0 text-center">&copy; {% now "Y" %} FAST CARS. All rights reserved.</p>
+  </div>
+</footer>

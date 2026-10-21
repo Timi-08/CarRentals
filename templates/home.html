@@ -1,2 +1,96 @@
 {% extends "base.html" %}
-{% block content %}<h1>FAST CARS</h1>{% endblock %}
+{% block title %}FAST CARS | Rent a car online{% endblock %}
+
+{% block content %}
+
+{# ---------- Hero ---------- #}
+<section class="fc-hero">
+  <div class="container">
+    <h1 class="mb-3">Find your ride. <span class="text-accent">Book it online.</span></h1>
+    <p class="mb-4">Browse our fleet, check availability and book in minutes, any time of day, without a phone call.</p>
+    <a href="/vehicles/" class="btn btn-fc-primary btn-lg me-2">Browse cars</a>
+    {% if not user.is_authenticated %}
+      <a href="{% url 'accounts:register' %}" class="btn btn-outline-light btn-lg">Create account</a>
+    {% endif %}
+  </div>
+</section>
+
+{% comment %}
+  Featured vehicles (UI-04).
+  Isreal's vehicles view will supply featured_vehicles (VEH-07).
+  Until then the loop is empty and the placeholder cards below are shown.
+{% endcomment %}
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-end mb-4">
+    <h2 class="mb-0">Featured cars</h2>
+    <a href="/vehicles/" class="fw-semibold">View all &rarr;</a>
+  </div>
+
+  <div class="row g-4">
+    {% for vehicle in featured_vehicles %}
+      <div class="col-sm-6 col-lg-4">
+        <div class="fc-card">
+          {% if vehicle.image %}<img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}">{% endif %}
+          <div class="fc-card-body">
+            <h5 class="mb-1">{{ vehicle.name }}</h5>
+            <p class="text-muted small mb-2">{{ vehicle.brand }} &middot; {{ vehicle.seats }} seats &middot; {{ vehicle.fuel_type }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fc-price">&#8358;{{ vehicle.price_per_day }} <small>/ day</small></span>
+              <a href="#" class="btn btn-fc-secondary btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      {# Placeholder cards - delete this block once the real featured data is wired in #}
+      {% for i in "123" %}
+        <div class="col-sm-6 col-lg-4">
+          <div class="fc-card">
+            <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='190'><rect width='100%' height='100%' fill='%23dde3ec'/></svg>">
+            <div class="fc-card-body">
+              <h5 class="mb-1">Car name</h5>
+              <p class="text-muted small mb-2">Brand &middot; 5 seats &middot; Petrol</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fc-price">&#8358;0 <small>/ day</small></span>
+                <a href="#" class="btn btn-fc-secondary btn-sm disabled">View</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+{# ---------- Why FAST CARS ---------- #}
+<section class="bg-white py-5 border-top border-bottom">
+  <div class="container">
+    <h2 class="text-center mb-4">Why book with FAST CARS</h2>
+    <div class="row">
+      <div class="col-md-4 fc-feature">
+        <i class="bi bi-clock-history"></i>
+        <h5 class="mt-2">Book any hour</h5>
+        <p class="text-muted mb-0">No more waiting for office hours. Reserve a car whenever suits you.</p>
+      </div>
+      <div class="col-md-4 fc-feature">
+        <i class="bi bi-calendar-check"></i>
+        <h5 class="mt-2">Live availability</h5>
+        <p class="text-muted mb-0">We check dates automatically, so a car is never promised twice.</p>
+      </div>
+      <div class="col-md-4 fc-feature">
+        <i class="bi bi-card-checklist"></i>
+        <h5 class="mt-2">Track your bookings</h5>
+        <p class="text-muted mb-0">See every booking and its status, Pending, Confirmed or Cancelled.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- Call to action ---------- #}
+<section class="container text-center py-5">
+  <h2 class="mb-3">Questions before you book?</h2>
+  <p class="text-muted mb-4">Send us a message and we'll get back to you.</p>
+  <a href="/contact/" class="btn btn-fc-outline btn-lg">Contact us</a>
+</section>
+
+{% endblock %}
