@@ -1,24 +1,36 @@
 {% extends "base.html" %}
+{% block title %}{{ vehicle }} | FAST CARS{% endblock %}
 {% block content %}
-<h1>{{ vehicle }}</h1>
+<div class="fc-page-header">
+  <div class="container"><h1>{{ vehicle }}</h1></div>
+</div>
 
-{% if vehicle.image %}
-  <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="480">
-{% endif %}
+<div class="container py-5">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+      <div class="fc-prose">
+        {% if vehicle.image %}
+          <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" class="img-fluid rounded-3 mb-4">
+        {% endif %}
+        {% if vehicle.description %}<p>{{ vehicle.description|linebreaksbr }}</p>{% endif %}
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="fc-prose">
+        <p class="fc-price">₦{{ vehicle.price_per_day|floatformat:2 }} <small>/ day</small></p>
+        <ul>
+          <li>Brand: {{ vehicle.brand }}</li>
+          <li>Seats: {{ vehicle.seats }}</li>
+          <li>Fuel: {{ vehicle.get_fuel_type_display }}</li>
+          <li>{% if vehicle.is_available %}Available{% else %}Currently unavailable{% endif %}</li>
+        </ul>
+        {% if vehicle.is_available %}
+          <a class="btn btn-fc-primary" href="{% url 'bookings:create' %}?vehicle={{ vehicle.pk }}">Book this car</a>
+        {% endif %}
+        <a class="btn btn-fc-outline" href="{% url 'vehicles:car_list' %}">Back to all vehicles</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-<ul>
-  <li>Brand: {{ vehicle.brand }}</li>
-  <li>Price: ₦{{ vehicle.price_per_day|floatformat:2 }} per day</li>
-  <li>Seats: {{ vehicle.seats }}</li>
-  <li>Fuel: {{ vehicle.get_fuel_type_display }}</li>
-  <li>
-    {% if vehicle.is_available %}Available{% else %}<strong>Currently unavailable</strong>{% endif %}
-  </li>
-</ul>
-
-{% if vehicle.description %}<p>{{ vehicle.description|linebreaksbr }}</p>{% endif %}
-
-{# Abdulkahreem adds the "Book now" button here, for available vehicles only. #}
-
-<p><a href="{% url 'vehicles:car_list' %}">Back to all vehicles</a></p>
 {% endblock %}

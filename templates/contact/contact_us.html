@@ -1,19 +1,34 @@
 {% extends "base.html" %}
+{% block title %}Contact Us | FAST CARS{% endblock %}
 {% block content %}
-<h1>Contact us</h1>
+<div class="fc-page-header">
+  <div class="container">
+    <h1>Contact us</h1>
+    <p>Questions about a rental? Send us a message.</p>
+  </div>
+</div>
 
-{% if details.address or details.phone or details.email or details.working_hours %}
-  <ul>
-    {% if details.address %}<li>Address: {{ details.address }}</li>{% endif %}
-    {% if details.phone %}<li>Phone: {{ details.phone }}</li>{% endif %}
-    {% if details.email %}<li>Email: {{ details.email }}</li>{% endif %}
-    {% if details.working_hours %}<li>Hours: {{ details.working_hours }}</li>{% endif %}
-  </ul>
-{% endif %}
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-5">
+      {% if details.address or details.phone or details.email or details.working_hours %}
+        <div class="fc-prose">
+          <h2 class="h4">Contact details</h2>
+          {% if details.address %}<p><i class="bi bi-geo-alt text-accent"></i> {{ details.address }}</p>{% endif %}
+          {% if details.phone %}<p><i class="bi bi-telephone text-accent"></i> {{ details.phone }}</p>{% endif %}
+          {% if details.email %}<p><i class="bi bi-envelope text-accent"></i> {{ details.email }}</p>{% endif %}
+          {% if details.working_hours %}<p><i class="bi bi-clock text-accent"></i> {{ details.working_hours }}</p>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-lg-7">
+      <form method="post" novalidate class="fc-prose">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-fc-primary">Send message</button>
+      </form>
+    </div>
+  </div>
+</div>
 
-<form method="post" novalidate>
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Send message</button>
-</form>
 {% endblock %}
