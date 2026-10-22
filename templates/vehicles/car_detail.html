@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ vehicle }}</h1>
+
+{% if vehicle.image %}
+  <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="480">
+{% endif %}
+
+<ul>
+  <li>Brand: {{ vehicle.brand }}</li>
+  <li>Price: ₦{{ vehicle.price_per_day|floatformat:2 }} per day</li>
+  <li>Seats: {{ vehicle.seats }}</li>
+  <li>Fuel: {{ vehicle.get_fuel_type_display }}</li>
+  <li>
+    {% if vehicle.is_available %}Available{% else %}<strong>Currently unavailable</strong>{% endif %}
+  </li>
+</ul>
+
+{% if vehicle.description %}<p>{{ vehicle.description|linebreaksbr }}</p>{% endif %}
+
+{# Abdulkahreem adds the "Book now" button here, for available vehicles only. #}
+
+<p><a href="{% url 'vehicles:car_list' %}">Back to all vehicles</a></p>
+{% endblock %}

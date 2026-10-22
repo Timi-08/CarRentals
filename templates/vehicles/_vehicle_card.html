@@ -1,0 +1,10 @@
+{# One vehicle card. Reuse it anywhere: {% include "vehicles/_vehicle_card.html" with vehicle=v %} #}
+<div class="vehicle-card">
+  {% if vehicle.image %}
+    <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="260">
+  {% endif %}
+  <h3><a href="{% url 'vehicles:car_detail' vehicle.pk %}">{{ vehicle }}</a></h3>
+  <p>₦{{ vehicle.price_per_day|floatformat:2 }} per day</p>
+  <p>{{ vehicle.seats }} seats · {{ vehicle.get_fuel_type_display }}</p>
+  {% if not vehicle.is_available %}<p><strong>Currently unavailable</strong></p>{% endif %}
+</div>
