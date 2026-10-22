@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main>
+  <h1>Car catalogue</h1>
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search cars</button>
+    <a href="{% url 'vehicles:list' %}">Clear filters</a>
+  </form>
+  {% if form.errors %}<p>Please correct the filter values.</p>{% endif %}
+  <section aria-label="Car listings">
+    {% for vehicle in page_obj %}
+      <article>
+        {% if vehicle.image %}
+          <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="320">
+        {% elif vehicle.stock_image %}
+          <img src="{% static vehicle.stock_image %}" alt="{{ vehicle }}" width="320">
+        {% endif %}
+        <h2><a href="{% url 'vehicles:detail' vehicle.pk %}">{{ vehicle }}</a></h2>
+        <p>{{ vehicle.seats }} seats · {{ vehicle.get_fuel_type_display }}</p>
+        <p>{{ vehicle.price_per_day }} per day</p>
+        <p>{% if vehicle.available %}Available{% else %}Currently unavailable{% endif %}</p>
+      </article>
+    {% empty %}
+      <p>No cars match those filters.</p>
+    {% endfor %}
+  </section>
+  {% if page_obj.has_other_pages %}
+    <nav aria-label="Pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&amp;q={{ request.GET.q|urlencode }}&amp;brand={{ request.GET.brand|urlencode }}&amp;min_price={{ request.GET.min_price|urlencode }}&amp;max_price={{ request.GET.max_price|urlencode }}&amp;seats={{ request.GET.seats|urlencode }}&amp;available={{ request.GET.available|urlencode }}">Previous</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&amp;q={{ request.GET.q|urlencode }}&amp;brand={{ request.GET.brand|urlencode }}&amp;min_price={{ request.GET.min_price|urlencode }}&amp;max_price={{ request.GET.max_price|urlencode }}&amp;seats={{ request.GET.seats|urlencode }}&amp;available={{ request.GET.available|urlencode }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</main>
+{% endblock %}

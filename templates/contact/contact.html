@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+  <h1>Contact us</h1>
+  <section>
+    {% if site_content.contact_email %}<p>Email: <a href="mailto:{{ site_content.contact_email }}">{{ site_content.contact_email }}</a></p>{% endif %}
+    {% if site_content.contact_phone %}<p>Phone: {{ site_content.contact_phone }}</p>{% endif %}
+    {% if site_content.contact_address %}<p>Address: {{ site_content.contact_address }}</p>{% endif %}
+  </section>
+  <h2>Send us a message</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send message</button>
+  </form>
+  <section>
+    <h2>Get updates</h2>
+    <form method="post" action="{% url 'contact:subscribe' %}">
+      {% csrf_token %}
+      {{ subscriber_form.as_p }}
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

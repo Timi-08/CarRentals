@@ -1,2 +1,26 @@
 {% extends "base.html" %}
-{% block content %}<h1>FAST CARS</h1>{% endblock %}
+{% load static %}
+{% block content %}
+<main>
+  <h1>{{ site_content.homepage_title }}</h1>
+  <p>{{ site_content.homepage_intro }}</p>
+  <p><a href="{% url 'vehicles:list' %}">Browse all cars</a></p>
+  <section aria-labelledby="featured-heading">
+    <h2 id="featured-heading">Featured cars</h2>
+    {% for vehicle in featured_vehicles %}
+      <article>
+        {% if vehicle.image %}
+          <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="320">
+        {% elif vehicle.stock_image %}
+          <img src="{% static vehicle.stock_image %}" alt="{{ vehicle }}" width="320">
+        {% endif %}
+        <h3><a href="{% url 'vehicles:detail' vehicle.pk %}">{{ vehicle }}</a></h3>
+        <p>{{ vehicle.seats }} seats · {{ vehicle.get_fuel_type_display }}</p>
+        <p>{{ vehicle.price_per_day }} per day</p>
+      </article>
+    {% empty %}
+      <p>No featured cars are available right now.</p>
+    {% endfor %}
+  </section>
+</main>
+{% endblock %}

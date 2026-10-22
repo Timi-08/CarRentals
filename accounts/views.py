@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
@@ -17,7 +18,8 @@ def register(request):
         return redirect('home')
     form = RegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = form.save()
+        with transaction.atomic():
+            user = form.save()
         login(request, user)
         messages.success(request, 'Welcome to FAST CARS! Your account has been created.')
         return redirect('home')

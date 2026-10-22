@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<main>
+  <p><a href="{% url 'vehicles:list' %}">Back to cars</a></p>
+  <article>
+    {% if vehicle.image %}
+      <img src="{{ vehicle.image.url }}" alt="{{ vehicle }}" width="640">
+    {% elif vehicle.stock_image %}
+      <img src="{% static vehicle.stock_image %}" alt="{{ vehicle }}" width="640">
+    {% endif %}
+    <h1>{{ vehicle }}</h1>
+    <p>{{ vehicle.price_per_day }} per day</p>
+    <p>{{ vehicle.seats }} seats · {{ vehicle.get_fuel_type_display }}</p>
+    <p>{% if vehicle.available %}Available for rental{% else %}Currently unavailable{% endif %}</p>
+    {% if vehicle.description %}<p>{{ vehicle.description|linebreaks }}</p>{% endif %}
+  </article>
+</main>
+{% endblock %}
