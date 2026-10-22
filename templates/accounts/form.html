@@ -1,36 +1,9 @@
 {% extends "base.html" %}
-{% block title %}{{ title }} | FAST CARS{% endblock %}
-
 {% block content %}
-<div class="fc-auth-stage">
-  <div class="auth-card">
-    <h1 class="h3 mb-4 text-center">{{ title }}</h1>
-
-    <form method="post" novalidate>
-      {% csrf_token %}
-
-      {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-          {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
-        </div>
-      {% endif %}
-
-      {% for field in form %}
-        <div class="field-group">
-          {{ field.label_tag }}
-          {{ field }}
-          {% if field.help_text %}<span class="helptext">{{ field.help_text|safe }}</span>{% endif %}
-          {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
-        </div>
-      {% endfor %}
-
-      <button type="submit" class="btn btn-fc-primary w-100 mt-2">{{ button|default:"Submit" }}</button>
-    </form>
-
-    {% if title == "Log in" %}
-      {% url 'password_reset' as reset_url %}{% if reset_url %}<p class="text-center small mt-3 mb-1"><a href="{{ reset_url }}">Forgot your password?</a></p>{% endif %}
-      <p class="text-center small mb-0">New here? <a href="{% url 'register' %}">Create an account</a></p>
-    {% endif %}
-  </div>
-</div>
+<h1>{{ title }}</h1>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">{{ button|default:"Submit" }}</button>
+</form>
 {% endblock %}

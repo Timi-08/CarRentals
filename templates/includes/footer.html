@@ -35,10 +35,10 @@
         <h6 class="text-uppercase small fw-semibold">Account</h6>
         <ul class="list-unstyled small mb-0">
           {% if user.is_authenticated %}
-            <li><a href="{% url 'profile' %}">My profile</a></li>
+            <li><a href="{% url 'accounts:profile' %}">My profile</a></li>
           {% else %}
-            <li><a href="{% url 'login' %}">Log in</a></li>
-            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'accounts:login' %}">Log in</a></li>
+            <li><a href="{% url 'accounts:register' %}">Register</a></li>
           {% endif %}
         </ul>
       </div>
