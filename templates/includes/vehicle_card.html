@@ -1,0 +1,33 @@
+{% comment %}
+  One vehicle card. Used on the home page, the car list and anywhere else a car is shown.
+  Usage:  include "includes/vehicle_card.html" with vehicle=vehicle
+
+  Fields read from the vehicle (all optional, missing ones are simply left out):
+    name, brand, seats, fuel_type, price_per_day, image, is_available
+{% endcomment %}
+<article class="fc-card" data-reveal>
+  <a href="{% url 'vehicles:car_detail' vehicle.pk %}" class="fc-card-media" aria-label="View {{ vehicle.name }}">
+    {% if vehicle.image %}
+      <img src="{{ vehicle.image.url }}" alt="{{ vehicle.name }}" loading="lazy">
+    {% else %}
+      {% include "includes/car_silhouette.html" %}
+    {% endif %}
+    {% if not vehicle.is_available %}
+      <span class="fc-card-badge fc-card-badge--off">Currently unavailable</span>
+    {% else %}
+      <span class="fc-card-badge">Available</span>
+    {% endif %}
+  </a>
+  <div class="fc-card-body">
+    <p class="fc-card-brand">{{ vehicle.brand }}</p>
+    <h3 class="h5 mb-0">{{ vehicle }}</h3>
+    <div class="fc-card-meta">
+      {% if vehicle.seats %}<span><i class="bi bi-people"></i>{{ vehicle.seats }} seats</span>{% endif %}
+      {% if vehicle.fuel_type %}<span><i class="bi bi-fuel-pump"></i>{{ vehicle.get_fuel_type_display }}</span>{% endif %}
+    </div>
+    <div class="fc-card-foot">
+      <span class="fc-price">&#8358;{{ vehicle.price_per_day }} <small>/ day</small></span>
+      <a href="{% url 'vehicles:car_detail' vehicle.pk %}" class="btn btn-fc-secondary btn-sm">View <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+</article>

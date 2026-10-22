@@ -1,0 +1,7 @@
+{# Subscribe box. Daniel: put {% include "contact/_subscribe_form.html" %} in the footer in base.html. #}
+<form method="post" action="{% url 'contact:subscribe' %}" class="subscribe-form">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+  <input type="email" name="email" placeholder="Your email address" required>
+  <button type="submit">Subscribe</button>
+</form>

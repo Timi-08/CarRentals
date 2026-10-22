@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% comment %}
+  Reusable template for static content pages such as About Us (UI-05).
+
+  Two ways to use it:
+  1. Admin-editable content (CON-05): the view passes a `page` object with `name` and `content`
+     (Isreal's Page content model). The content is shown automatically.
+  2. Fixed content: a child template (see about.html) overrides the `title`, `heading`
+     and `page_body` blocks.
+{% endcomment %}
+
+{% block title %}{% firstof page.name "Page" %} | FAST CARS{% endblock %}
+
+{% block content %}
+<div class="fc-page-header">
+  <div class="container">
+    <h1>{% block heading %}{% firstof page.name "Page" %}{% endblock %}</h1>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row g-4">
+    <div class="col-lg-8" data-reveal>
+      <div class="fc-prose">
+        {% if page.content %}
+          {{ page.content|linebreaks }}
+        {% else %}
+          {% block page_body %}<p class="text-muted">This page has no content yet.</p>{% endblock %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-4" data-reveal>
+      {% include "includes/contact_details.html" %}
+    </div>
+  </div>
+</div>
+{% endblock %}

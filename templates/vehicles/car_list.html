@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Our Vehicles | FAST CARS{% endblock %}
+{% block content %}
+<div class="fc-page-header">
+  <div class="container">
+    <h1>Our vehicles</h1>
+    <p>Find the right car for your next journey.</p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <form method="get" action="{% url 'vehicles:car_list' %}" class="fc-filter">
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-fc-primary">Search</button>
+    <a href="{% url 'vehicles:car_list' %}" class="btn btn-fc-outline">Clear filters</a>
+  </form>
+
+  {% if page_obj %}
+    <div class="row g-4">
+      {% for vehicle in page_obj %}
+        <div class="col-md-6 col-lg-4">{% include "vehicles/_vehicle_card.html" %}</div>
+      {% endfor %}
+    </div>
+
+    {% include "includes/pagination.html" with page_obj=page_obj %}
+  {% else %}
+    <p class="fc-prose">No vehicles match your search.</p>
+  {% endif %}
+</div>
+{% endblock %}

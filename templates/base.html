@@ -1,10 +1,35 @@
-<!doctype html>
+{% load static %}<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>FAST CARS</title></head>
-<body>
-  {% for message in messages %}
-    <p class="{{ message.tags }}">{{ message }}</p>
-  {% endfor %}
-  {% block content %}{% endblock %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}FAST CARS{% endblock %}</title>
+
+  {# Tell CSS that JavaScript is running, so scroll animations can start hidden (main.js reveals them) #}
+  <script>document.documentElement.classList.add('js');</script>
+
+  {# Libraries are bundled in static/vendor, so the site also works without internet #}
+  <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}" rel="stylesheet">
+  {# Our shared stylesheet - always loaded after Bootstrap so it can override it #}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  {% include "includes/navbar.html" %}
+  {% include "includes/messages.html" %}
+
+  <main class="flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "includes/footer.html" %}
+
+  <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/gsap/gsap.min.js' %}"></script>
+  <script src="{% static 'vendor/gsap/ScrollTrigger.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

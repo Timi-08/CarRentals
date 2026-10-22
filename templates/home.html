@@ -1,2 +1,129 @@
 {% extends "base.html" %}
-{% block content %}<h1>FAST CARS</h1>{% endblock %}
+{% block title %}FAST CARS | Rent a car online{% endblock %}
+
+{% block content %}
+
+{# ---------- Hero: full screen, animated with GSAP (static/js/main.js) ---------- #}
+<section class="fc-hero">
+  <div class="fc-hero-word" aria-hidden="true">FAST</div>
+  <div class="fc-speed" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <span class="fc-eyebrow" data-hero-in><i class="fc-dot"></i> Online car rental</span>
+        <h1 data-split>Find your ride. <span class="text-accent">Book it online.</span></h1>
+        <p class="fc-hero-lead" data-hero-in>Browse our fleet, check availability and book in minutes, any time of day, without a phone call.</p>
+        <div class="d-flex flex-wrap gap-3" data-hero-in>
+          <a href="/vehicles/" class="btn btn-fc-primary btn-lg" data-magnetic>Browse cars <i class="bi bi-arrow-right"></i></a>
+          {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-light btn-lg" data-magnetic>Create account</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-hero-car" aria-hidden="true">{% include "includes/car_silhouette.html" with spin=True %}</div>
+  <a href="#featured" class="fc-scroll-cue">Scroll</a>
+</section>
+
+{# ---------- Marquee strip ---------- #}
+<div class="fc-marquee" aria-hidden="true">
+  <div class="fc-marquee-track">
+    <span>Book any hour <i class="bi bi-circle-fill"></i> Live availability <i class="bi bi-circle-fill"></i> Track every booking <i class="bi bi-circle-fill"></i> No phone calls <i class="bi bi-circle-fill"></i></span>
+    <span>Book any hour <i class="bi bi-circle-fill"></i> Live availability <i class="bi bi-circle-fill"></i> Track every booking <i class="bi bi-circle-fill"></i> No phone calls <i class="bi bi-circle-fill"></i></span>
+    <span>Book any hour <i class="bi bi-circle-fill"></i> Live availability <i class="bi bi-circle-fill"></i> Track every booking <i class="bi bi-circle-fill"></i> No phone calls <i class="bi bi-circle-fill"></i></span>
+    <span>Book any hour <i class="bi bi-circle-fill"></i> Live availability <i class="bi bi-circle-fill"></i> Track every booking <i class="bi bi-circle-fill"></i> No phone calls <i class="bi bi-circle-fill"></i></span>
+  </div>
+</div>
+
+{% comment %}
+  Featured vehicles (UI-04).
+  Isreal's vehicles view will supply featured_vehicles (VEH-07).
+  Until then the loop is empty and the placeholder cards below are shown.
+{% endcomment %}
+<section class="fc-section" id="featured">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-5" data-reveal>
+      <div>
+        <span class="fc-kicker">Our fleet</span>
+        <h2 class="fc-section-title mb-0">Featured cars</h2>
+      </div>
+      <a href="/vehicles/" class="btn btn-fc-outline">View all cars <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="row g-4">
+      {% for vehicle in featured_vehicles %}
+        <div class="col-md-6 col-lg-4">{% include "includes/vehicle_card.html" %}</div>
+      {% empty %}
+        {# Placeholder cards - delete this block once the real featured data is wired in #}
+        {% for i in "123" %}
+          <div class="col-md-6 col-lg-4">
+            <article class="fc-card" data-reveal>
+              <div class="fc-card-media">{% include "includes/car_silhouette.html" %}</div>
+              <div class="fc-card-body">
+                <p class="fc-card-brand">Brand</p>
+                <h3 class="h5 mb-0">Car name</h3>
+                <div class="fc-card-meta"><span><i class="bi bi-people"></i>5 seats</span><span><i class="bi bi-fuel-pump"></i>Petrol</span></div>
+                <div class="fc-card-foot">
+                  <span class="fc-price">&#8358;0 <small>/ day</small></span>
+                  <span class="btn btn-fc-secondary btn-sm disabled">View <i class="bi bi-arrow-right"></i></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- Why FAST CARS (dark section) ---------- #}
+<section class="fc-section fc-section-dark">
+  <div class="container">
+    <div class="text-center mb-5" data-reveal>
+      <span class="fc-kicker">Why FAST CARS</span>
+      <h2 class="fc-section-title">Renting a car, made simple</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4" data-reveal>
+        <div class="fc-feature-card">
+          <span class="fc-num" aria-hidden="true">01</span>
+          <div class="fc-feature-icon"><i class="bi bi-clock-history"></i></div>
+          <h3 class="h5">Book any hour</h3>
+          <p>No more waiting for office hours. Reserve a car whenever suits you.</p>
+        </div>
+      </div>
+      <div class="col-md-4" data-reveal>
+        <div class="fc-feature-card">
+          <span class="fc-num" aria-hidden="true">02</span>
+          <div class="fc-feature-icon"><i class="bi bi-calendar-check"></i></div>
+          <h3 class="h5">Live availability</h3>
+          <p>We check dates automatically, so a car is never promised twice.</p>
+        </div>
+      </div>
+      <div class="col-md-4" data-reveal>
+        <div class="fc-feature-card">
+          <span class="fc-num" aria-hidden="true">03</span>
+          <div class="fc-feature-icon"><i class="bi bi-card-checklist"></i></div>
+          <h3 class="h5">Track your bookings</h3>
+          <p>See every booking and its status: Pending, Confirmed or Cancelled.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- Call to action ---------- #}
+<section class="fc-section">
+  <div class="container">
+    <div class="fc-cta" data-reveal>
+      <h2>Questions before you book?</h2>
+      <p>Send us a message and we'll get back to you.</p>
+      <a href="/contact/" class="btn btn-lg" data-magnetic>Contact us <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

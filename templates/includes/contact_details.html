@@ -1,0 +1,14 @@
+{% comment %}
+  Contact details box. Reuse on the About page, the Contact page and anywhere else it is needed.
+  Usage: include "includes/contact_details.html"
+  To use real data (CON-05), pass a `contact` object with address, phone, email and hours,
+  for example: include "includes/contact_details.html" with contact=contact_details
+  Without it, placeholder text is shown.
+{% endcomment %}
+<aside class="fc-contact-card">
+  <h2 class="h5 mb-4">Contact us</h2>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-geo-alt text-accent"></i> <span>{{ contact.address|default:"Address coming soon" }}</span></p>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-telephone text-accent"></i> <span>{{ contact.phone|default:"Phone number coming soon" }}</span></p>
+  <p class="mb-3 d-flex align-items-center"><i class="bi bi-envelope text-accent"></i> <span>{{ contact.email|default:"Email coming soon" }}</span></p>
+  <p class="mb-0 d-flex align-items-center"><i class="bi bi-clock text-accent"></i> <span>{{ contact.hours|default:"Open every day" }}</span></p>
+</aside>
