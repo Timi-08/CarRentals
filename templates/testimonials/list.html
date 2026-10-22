@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Testimonials</h1>
+<a href="{% url 'testimonials:create' %}">Write a testimonial</a>
+{% for t in testimonials %}
+  <blockquote>{{ t.message }}<footer>- {{ t.user.get_full_name|default:t.user.username }}</footer></blockquote>
+{% empty %}
+  <p>No testimonials yet.</p>
+{% endfor %}
+
+{% if testimonials.has_other_pages %}
+<p>
+  {% if testimonials.has_previous %}<a href="?page={{ testimonials.previous_page_number }}">Previous</a>{% endif %}
+  Page {{ testimonials.number }} of {{ testimonials.paginator.num_pages }}
+  {% if testimonials.has_next %}<a href="?page={{ testimonials.next_page_number }}">Next</a>{% endif %}
+</p>
+{% endif %}
+{% endblock %}
