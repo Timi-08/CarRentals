@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Our vehicles</h1>
+
+<form method="get" action="{% url 'vehicles:car_list' %}">
+  {{ form.as_p }}
+  <button type="submit">Search</button>
+  <a href="{% url 'vehicles:car_list' %}">Clear filters</a>
+</form>
+
+{% if page_obj %}
+  <div class="vehicle-grid">
+    {% for vehicle in page_obj %}
+      {% include "vehicles/_vehicle_card.html" %}
+    {% endfor %}
+  </div>
+
+  <nav class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}
+      <a href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+  </nav>
+{% else %}
+  <p>No vehicles match your search.</p>
+{% endif %}
+{% endblock %}

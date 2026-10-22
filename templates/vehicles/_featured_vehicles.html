@@ -1,0 +1,9 @@
+{# Featured cars for the home page. Daniel: put {% include "vehicles/_featured_vehicles.html" %} in home.html. #}
+{% if featured_vehicles %}
+  <h2>Featured vehicles</h2>
+  <div class="vehicle-grid">
+    {% for vehicle in featured_vehicles %}
+      {% include "vehicles/_vehicle_card.html" %}
+    {% endfor %}
+  </div>
+{% endif %}
