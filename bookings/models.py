@@ -14,7 +14,6 @@ class Booking(models.Model):
         (CONFIRMED, 'Confirmed'),
         (CANCELLED, 'Cancelled'),
     ]
-    # Only these statuses block other bookings for the same vehicle (BKG-05)
     BLOCKING_STATUSES = (PENDING, CONFIRMED)
 
     customer = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -33,7 +32,6 @@ class Booking(models.Model):
     class Meta:
         ordering = ['-created_at']
         constraints = [
-            # Database-level rule (NFR-06): return date must be after pickup date
             models.CheckConstraint(
                 condition=models.Q(return_date__gt=models.F('pickup_date')),
                 name='booking_return_after_pickup',
@@ -58,20 +56,15 @@ class Booking(models.Model):
         errors = {}
 
         if self.pickup_date and self.return_date:
-            # BKG-03: return must be after pickup
             if self.return_date <= self.pickup_date:
                 errors['return_date'] = "Return date must be after the pickup date."
-            # BKG-03: pickup cannot be in the past (new bookings only)
             if self._state.adding and self.pickup_date < timezone.localdate():
                 errors['pickup_date'] = "Pickup date cannot be in the past."
 
         if self.vehicle_id:
-            # BKG-04: vehicle must be available (new bookings only)
             if self._state.adding and not self.vehicle.is_available:
                 errors['vehicle'] = "This vehicle is not available for booking."
 
-            # BKG-05: no overlap with Pending/Confirmed bookings of same vehicle.
-            # Back-to-back is allowed (return day = next pickup day).
             if (self.pickup_date and self.return_date
                     and 'return_date' not in errors
                     and self.status in self.BLOCKING_STATUSES):

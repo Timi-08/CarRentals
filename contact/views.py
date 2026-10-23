@@ -35,7 +35,6 @@ def subscribe(request):
         error = next(iter(form.errors.get('email', [])), 'Please enter a valid email address.')
         messages.error(request, error)
 
-    # Go back to the page the form was on, but never to another website.
     next_url = request.POST.get('next', '')
     if next_url and url_has_allowed_host_and_scheme(
             next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):

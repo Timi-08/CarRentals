@@ -17,6 +17,4 @@ class BookingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Only offer vehicles that can be booked (BKG-04).
-        # If Isreal names the field differently, change is_available here.
         self.fields['vehicle'].queryset = Vehicle.objects.filter(is_available=True)

@@ -82,7 +82,7 @@ def admin_dashboard(request):
         'users_count': User.objects.filter(is_staff=False).count(),
         'bookings_count': _count('bookings', 'Booking'),
         'subscribers_count': _count('contact', 'Subscriber'),
-        'queries_count': _count('contact', 'Contact'),   # rename to match Isreal's model
+        'queries_count': _count('contact', 'Contact'),
     }
     return render(request, 'accounts/admin_dashboard.html', context)
 

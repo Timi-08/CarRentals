@@ -475,7 +475,6 @@ class AdminAccessTests(TestCase):
         page_one = self.client.get(reverse('accounts:admin_user_list'))
         page_two = self.client.get(reverse('accounts:admin_user_list') + '?page=2')
 
-        # 13 customers in total: 10 on page one, 3 on page two.
         self.assertEqual(len(page_one.context['page_obj']), 10)
         self.assertEqual(len(page_two.context['page_obj']), 3)
 

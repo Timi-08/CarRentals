@@ -11,7 +11,7 @@ class ContactAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'email', 'message', 'created_at')
 
     def has_add_permission(self, request):
-        return False  # queries come from the Contact Us form, not from the admin
+        return False 
 
 
 @admin.register(Subscriber)
@@ -33,7 +33,7 @@ class ContactDetailsAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'phone', 'email')
 
     def has_add_permission(self, request):
-        return not ContactDetails.objects.exists()  # only one set of details
+        return not ContactDetails.objects.exists()  
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -9,17 +9,17 @@ from .forms import BookingForm
 from .models import Booking
 
 
-@login_required  # BKG-01: guests are sent to the login page
+@login_required  
 def create_booking(request):
     initial = {}
     if request.GET.get('vehicle'):
-        initial['vehicle'] = request.GET['vehicle']  # lets a car page link here
+        initial['vehicle'] = request.GET['vehicle']  
 
     form = BookingForm(request.POST or None, initial=initial)
     if request.method == 'POST' and form.is_valid():
         booking = form.save(commit=False)
-        booking.customer = request.user      # always the logged-in user
-        booking.status = Booking.PENDING     # BKG-07
+        booking.customer = request.user     
+        booking.status = Booking.PENDING    
         booking.save()
         messages.success(request, "Booking submitted. Waiting for confirmation.")
         return redirect('bookings:confirmation', pk=booking.pk)
@@ -28,7 +28,6 @@ def create_booking(request):
 
 @login_required
 def booking_confirmation(request, pk):
-    # customer=request.user stops users opening other people's bookings
     booking = get_object_or_404(Booking, pk=pk, customer=request.user)
     return render(request, 'bookings/confirmation.html', {'booking': booking})
 

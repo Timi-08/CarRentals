@@ -6,13 +6,10 @@
   <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
   <title>{% block title %}FAST CARS{% endblock %}</title>
 
-  {# Tell CSS that JavaScript is running, so scroll animations can start hidden (main.js reveals them) #}
   <script>document.documentElement.classList.add('js');</script>
 
-  {# Libraries are bundled in static/vendor, so the site also works without internet #}
   <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}" rel="stylesheet">
-  {# Our shared stylesheet - always loaded after Bootstrap so it can override it #}
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   {% block extra_css %}{% endblock %}
 </head>
