@@ -1,18 +1,39 @@
 {% extends 'base.html' %}
+{% block title %}Testimonials | FAST CARS{% endblock %}
 {% block content %}
-<h1>Testimonials</h1>
-<a href="{% url 'testimonials:create' %}">Write a testimonial</a>
-{% for t in testimonials %}
-  <blockquote>{{ t.message }}<footer>- {{ t.user.get_full_name|default:t.user.username }}</footer></blockquote>
-{% empty %}
-  <p>No testimonials yet.</p>
-{% endfor %}
+<div class="fc-page-header">
+  <div class="container d-flex flex-wrap justify-content-between align-items-end gap-3">
+    <div>
+      <span class="fc-kicker">From our customers</span>
+      <h1>Testimonials</h1>
+      <p>Stories from people who have travelled with FAST CARS.</p>
+    </div>
+    <a class="btn btn-fc-primary" href="{% url 'testimonials:create' %}">Write a testimonial <i class="bi bi-arrow-right"></i></a>
+  </div>
+</div>
 
-{% if testimonials.has_other_pages %}
-<p>
-  {% if testimonials.has_previous %}<a href="?page={{ testimonials.previous_page_number }}">Previous</a>{% endif %}
-  Page {{ testimonials.number }} of {{ testimonials.paginator.num_pages }}
-  {% if testimonials.has_next %}<a href="?page={{ testimonials.next_page_number }}">Next</a>{% endif %}
-</p>
-{% endif %}
+<div class="container pb-5">
+  {% if testimonials %}
+    <div class="fc-testimonial-grid">
+      {% for t in testimonials %}
+        <article class="fc-testimonial">
+          <div class="fc-testimonial-mark" aria-hidden="true">“</div>
+          <blockquote>{{ t.message|linebreaksbr }}</blockquote>
+          <footer class="fc-testimonial-author">
+            <span class="fc-testimonial-avatar" aria-hidden="true">{{ t.user.first_name|default:t.user.username|slice:":1"|upper }}</span>
+            <span><strong>{{ t.user.get_full_name|default:t.user.username }}</strong><time datetime="{{ t.created_at|date:'Y-m-d' }}">{{ t.created_at|date:"M j, Y" }}</time></span>
+          </footer>
+        </article>
+      {% endfor %}
+    </div>
+    {% include "includes/pagination.html" with page_obj=testimonials %}
+  {% else %}
+    <section class="fc-empty-state">
+      <span class="fc-empty-icon"><i class="bi bi-chat-quote"></i></span>
+      <h2 class="h4">No testimonials yet</h2>
+      <p>Be the first to share your experience.</p>
+      <a class="btn btn-fc-primary" href="{% url 'testimonials:create' %}">Write a testimonial</a>
+    </section>
+  {% endif %}
+</div>
 {% endblock %}

@@ -1,22 +1,64 @@
-{% extends "pages/static_page.html" %}
+{% extends "base.html" %}
+{% block title %}About FAST CARS{% endblock %}
+{% block content %}
+<section class="fc-about-intro">
+  <div class="container">
+    <span class="fc-kicker">About FAST CARS</span>
+    <div class="row g-4 align-items-end">
+      <div class="col-lg-8">
+        <h1>Make the journey<br><span>yours.</span></h1>
+      </div>
+      <div class="col-lg-4">
+        <p>Find a car that fits your trip, request the dates you need, and keep your booking details in one place.</p>
+        <a class="btn btn-fc-primary" href="{% url 'vehicles:car_list' %}">Explore the fleet <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+    <div class="fc-about-rule"><span>Browse</span><span>Book</span><span>Go</span></div>
+  </div>
+</section>
 
-{% block title %}About Us | FAST CARS{% endblock %}
-{% block heading %}About Us{% endblock %}
+<section class="fc-section fc-about-process">
+  <div class="container">
+    <div class="row g-4 align-items-end mb-4">
+      <div class="col-lg-7">
+        <span class="fc-kicker">A straightforward process</span>
+        <h2 class="fc-section-title">From choosing a car to checking your request.</h2>
+      </div>
+      <div class="col-lg-5"><p class="mb-0">The rental experience is organized around the things you need to do, without losing track of the details.</p></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <article class="fc-about-step">
+          <span class="fc-about-step-number">01</span>
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <h3>Choose your car</h3>
+          <p>Compare vehicles by brand, daily price, seats, and fuel type.</p>
+        </article>
+      </div>
+      <div class="col-md-4">
+        <article class="fc-about-step">
+          <span class="fc-about-step-number">02</span>
+          <i class="bi bi-calendar2-check" aria-hidden="true"></i>
+          <h3>Send a request</h3>
+          <p>Choose your pickup and return dates, then submit your booking request.</p>
+        </article>
+      </div>
+      <div class="col-md-4">
+        <article class="fc-about-step">
+          <span class="fc-about-step-number">03</span>
+          <i class="bi bi-list-check" aria-hidden="true"></i>
+          <h3>Follow its status</h3>
+          <p>Sign in to review your bookings and see their latest status.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
 
-{% block page_body %}
-  <p class="lead">FAST CARS makes renting a car simple: browse the fleet, pick your dates and book online, any time of day.</p>
-
-  <h2 class="h4 mt-4">Why we built this</h2>
-  <p>Booking by telephone or walking into the office is slow, and it is easy to double-book a car. Our online system checks availability for you and keeps every booking in one place.</p>
-
-  <h2 class="h4 mt-4">What you can do</h2>
-  <ul>
-    <li>Browse cars by brand, price and seats</li>
-    <li>Book a car for the dates you need and track its status</li>
-    <li>Read what other customers say about us</li>
-    <li>Contact us with any question</li>
-  </ul>
-
-  <h2 class="h4 mt-4">Our promise</h2>
-  <p>Clear prices, honest availability and a quick reply when you need help.</p>
+<section class="fc-about-close">
+  <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div><span class="fc-kicker">Need a hand?</span><h2 class="h3 mb-0">We’re here to help with your next trip.</h2></div>
+    <a class="btn btn-fc-outline" href="{% url 'contact:contact_us' %}">Contact us <i class="bi bi-arrow-right"></i></a>
+  </div>
+</section>
 {% endblock %}

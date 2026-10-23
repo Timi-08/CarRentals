@@ -10,9 +10,49 @@
 
 <div class="container py-5">
   <form method="get" action="{% url 'vehicles:car_list' %}" class="fc-filter">
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-fc-primary">Search</button>
-    <a href="{% url 'vehicles:car_list' %}" class="btn btn-fc-outline">Clear filters</a>
+    <div class="fc-filter-heading">
+      <div>
+        <span class="fc-kicker">Find your fit</span>
+        <h2 class="h4 mb-0">Search the fleet</h2>
+      </div>
+      <span class="small text-muted">{{ page_obj.paginator.count }} vehicle{{ page_obj.paginator.count|pluralize }}</span>
+    </div>
+    {% if form.non_field_errors %}<div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="fc-filter-grid">
+      <div class="fc-filter-field fc-filter-field--search">
+        {{ form.q.label_tag }}
+        {{ form.q }}
+        {% for error in form.q.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="fc-filter-field">
+        {{ form.brand.label_tag }}
+        {{ form.brand }}
+        {% for error in form.brand.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="fc-filter-field">
+        {{ form.min_price.label_tag }}
+        {{ form.min_price }}
+        {% for error in form.min_price.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="fc-filter-field">
+        {{ form.max_price.label_tag }}
+        {{ form.max_price }}
+        {% for error in form.max_price.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="fc-filter-field">
+        {{ form.seats.label_tag }}
+        {{ form.seats }}
+        {% for error in form.seats.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+      </div>
+      <label class="fc-filter-check" for="{{ form.available_only.id_for_label }}">
+        {{ form.available_only }}
+        <span>{{ form.available_only.label }}</span>
+      </label>
+      <div class="fc-filter-actions">
+        <button type="submit" class="btn btn-fc-primary">Search cars <i class="bi bi-arrow-right"></i></button>
+        <a href="{% url 'vehicles:car_list' %}" class="btn btn-fc-outline">Clear</a>
+      </div>
+    </div>
   </form>
 
   {% if page_obj %}

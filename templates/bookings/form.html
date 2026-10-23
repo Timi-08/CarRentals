@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
+{% block title %}Book a Vehicle | FAST CARS{% endblock %}
 {% block content %}
-<h1>Book a vehicle</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Submit booking</button>
-</form>
+<div class="fc-page-header">
+  <div class="container">
+    <span class="fc-kicker">Your next trip</span>
+    <h1>Book a vehicle</h1>
+    <p>Choose your vehicle and rental dates.</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+      <form method="post" class="fc-prose fc-booking-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+          <div class="fc-form-field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}<div class="fc-form-help">{{ field.help_text }}</div>{% endif %}
+            {% for error in field.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+          </div>
+        {% endfor %}
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button type="submit" class="btn btn-fc-primary">Submit booking <i class="bi bi-arrow-right"></i></button>
+          <a href="{% url 'vehicles:car_list' %}" class="btn btn-fc-outline">Back to cars</a>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-5">
+      <aside class="fc-booking-aside">
+        <span class="fc-kicker">Booking status</span>
+        <h2 class="h4">What happens next</h2>
+        <ol class="fc-booking-steps">
+          <li><span>01</span><div><strong>Request received</strong><p>Your booking starts as pending.</p></div></li>
+          <li><span>02</span><div><strong>Availability checked</strong><p>An administrator reviews the request.</p></div></li>
+          <li><span>03</span><div><strong>Status updated</strong><p>Track it from My Bookings.</p></div></li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</div>
 {% endblock %}

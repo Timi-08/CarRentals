@@ -1,10 +1,41 @@
 {% extends "base.html" %}
+{% block title %}Edit Profile | FAST CARS{% endblock %}
 {% block content %}
-<h1>Edit profile</h1>
-<form method="post" novalidate>
-  {% csrf_token %}
-  {{ u_form.as_p }}
-  {{ p_form.as_p }}
-  <button type="submit">Save</button>
-</form>
+<div class="fc-page-header">
+  <div class="container">
+    <span class="fc-kicker">Your account</span>
+    <h1>Edit profile</h1>
+    <p>Keep your contact details up to date.</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="fc-prose fc-profile-edit">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if u_form.non_field_errors %}<div class="alert alert-danger">{{ u_form.non_field_errors }}</div>{% endif %}
+      {% if p_form.non_field_errors %}<div class="alert alert-danger">{{ p_form.non_field_errors }}</div>{% endif %}
+      <div class="fc-profile-edit-grid">
+        {% for field in u_form %}
+          <div class="fc-form-field">
+            {{ field.label_tag }}{{ field }}
+            {% if field.help_text %}<div class="fc-form-help">{{ field.help_text|safe }}</div>{% endif %}
+            {% for error in field.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+          </div>
+        {% endfor %}
+        {% for field in p_form %}
+          <div class="fc-form-field">
+            {{ field.label_tag }}{{ field }}
+            {% if field.help_text %}<div class="fc-form-help">{{ field.help_text|safe }}</div>{% endif %}
+            {% for error in field.errors %}<div class="fc-field-error">{{ error }}</div>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="d-flex flex-wrap gap-2 mt-4">
+        <button type="submit" class="btn btn-fc-primary"><i class="bi bi-check2 me-1"></i>Save changes</button>
+        <a href="{% url 'accounts:profile' %}" class="btn btn-fc-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

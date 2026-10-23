@@ -1,11 +1,41 @@
 {% extends "base.html" %}
+{% block title %}My Profile | FAST CARS{% endblock %}
 {% block content %}
-<h1>My profile</h1>
-<p>Username: {{ user.username }}</p>
-<p>Name: {{ user.get_full_name }}</p>
-<p>Email: {{ user.email }}</p>
-<p>Phone: {{ user.profile.phone }}</p>
-<p>Address: {{ user.profile.address }}</p>
-<a href="{% url 'accounts:profile_edit' %}">Edit profile</a>
-<a href="{% url 'accounts:password_change' %}">Change password</a>
+<div class="fc-page-header">
+	<div class="container">
+		<span class="fc-kicker">Your account</span>
+		<h1>My profile</h1>
+		<p>Manage your personal details and account settings.</p>
+	</div>
+</div>
+
+<div class="container pb-5">
+	<div class="row g-4 align-items-start">
+		<div class="col-lg-8">
+			<section class="fc-prose fc-profile-panel">
+				<div class="fc-profile-heading">
+					<div class="fc-avatar" aria-hidden="true">{{ user.first_name|default:user.username|slice:":1"|upper }}</div>
+					<div>
+						<span class="fc-kicker">Customer profile</span>
+						<h2 class="h4 mb-0">{{ user.get_full_name|default:user.username }}</h2>
+					</div>
+				</div>
+				<dl class="fc-profile-details">
+					<div><dt>Username</dt><dd>{{ user.username }}</dd></div>
+					<div><dt>Email</dt><dd>{{ user.email|default:"Not provided" }}</dd></div>
+					<div><dt>Phone</dt><dd>{{ user.profile.phone|default:"Not provided" }}</dd></div>
+					<div><dt>Address</dt><dd>{{ user.profile.address|default:"Not provided" }}</dd></div>
+				</dl>
+			</section>
+		</div>
+		<div class="col-lg-4">
+			<aside class="fc-profile-actions">
+				<h2 class="h5">Account settings</h2>
+				<a class="btn btn-fc-primary w-100" href="{% url 'accounts:profile_edit' %}"><i class="bi bi-pencil-square me-2"></i>Edit profile</a>
+				<a class="btn btn-fc-outline w-100" href="{% url 'accounts:password_change' %}"><i class="bi bi-shield-lock me-2"></i>Change password</a>
+				<a class="fc-profile-link" href="{% url 'bookings:my_bookings' %}">View my bookings <i class="bi bi-arrow-right"></i></a>
+			</aside>
+		</div>
+	</div>
+</div>
 {% endblock %}
