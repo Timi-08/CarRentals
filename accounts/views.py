@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
@@ -90,5 +91,17 @@ def admin_dashboard(request):
 @staff_member_required(login_url='accounts:admin_login')
 def admin_user_list(request):
     users = User.objects.filter(is_staff=False).select_related('profile').order_by('-date_joined')
+    search_query = request.GET.get('q', '').strip()
+    if search_query:
+        users = users.filter(
+            Q(username__icontains=search_query)
+            | Q(first_name__icontains=search_query)
+            | Q(last_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(profile__phone__icontains=search_query)
+        )
     page = Paginator(users, 10).get_page(request.GET.get('page'))
-    return render(request, 'accounts/admin_user_list.html', {'page_obj': page})
+    return render(request, 'accounts/admin_user_list.html', {
+        'page_obj': page,
+        'search_query': search_query,
+    })

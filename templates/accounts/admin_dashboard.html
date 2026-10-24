@@ -1,13 +1,71 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Admin dashboard</h1>
-<ul>
-  <li>Registered users: {{ users_count }}</li>
-  <li>Bookings: {{ bookings_count }}</li>
-  <li>Subscribers: {{ subscribers_count }}</li>
-  <li>Contact queries: {{ queries_count }}</li>
-</ul>
-<a href="{% url 'accounts:admin_user_list' %}">Registered users</a>
-<a href="{% url 'accounts:admin_password_change' %}">Change password</a>
-<form method="post" action="{% url 'accounts:admin_logout' %}">{% csrf_token %}<button>Log out</button></form>
+<section class="fc-page-header fc-admin-header">
+  <div class="container">
+    <span class="fc-kicker">FAST CARS / ADMIN</span>
+    <h1>Dashboard</h1>
+    <p>Keep an eye on your customers and activity.</p>
+  </div>
+</section>
+
+<section class="container fc-admin-page">
+  <div class="fc-admin-toolbar">
+    <form class="fc-admin-search" method="get" action="{% url 'accounts:admin_user_list' %}">
+      <label class="visually-hidden" for="dashboard-user-search">Search registered users</label>
+      <i class="bi bi-search" aria-hidden="true"></i>
+      <input class="form-control" id="dashboard-user-search" type="search" name="q"
+             placeholder="Search users by name, email, username or phone" autocomplete="off">
+      <button class="btn btn-fc-primary" type="submit">Search</button>
+    </form>
+    <a class="btn btn-fc-outline" href="{% url 'accounts:admin_password_change' %}">
+      <i class="bi bi-key" aria-hidden="true"></i> Change password
+    </a>
+    <form method="post" action="{% url 'accounts:admin_logout' %}">
+      {% csrf_token %}
+      <button class="btn btn-fc-secondary" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Log out</button>
+    </form>
+  </div>
+
+  <div class="row g-3 g-lg-4">
+    <div class="col-6 col-lg-3">
+      <article class="fc-stat h-100">
+        <i class="bi bi-people fc-stat-icon" aria-hidden="true"></i>
+        <div class="fc-stat-number">{{ users_count }}</div>
+        <div class="fc-stat-label">Registered users</div>
+      </article>
+    </div>
+    <div class="col-6 col-lg-3">
+      <article class="fc-stat h-100">
+        <i class="bi bi-car-front fc-stat-icon" aria-hidden="true"></i>
+        <div class="fc-stat-number">{{ bookings_count }}</div>
+        <div class="fc-stat-label">Bookings</div>
+      </article>
+    </div>
+    <div class="col-6 col-lg-3">
+      <article class="fc-stat h-100">
+        <i class="bi bi-envelope-paper fc-stat-icon" aria-hidden="true"></i>
+        <div class="fc-stat-number">{{ subscribers_count }}</div>
+        <div class="fc-stat-label">Subscribers</div>
+      </article>
+    </div>
+    <div class="col-6 col-lg-3">
+      <article class="fc-stat h-100">
+        <i class="bi bi-chat-left-text fc-stat-icon" aria-hidden="true"></i>
+        <div class="fc-stat-number">{{ queries_count }}</div>
+        <div class="fc-stat-label">Contact queries</div>
+      </article>
+    </div>
+  </div>
+
+  <div class="fc-admin-section-link">
+    <div>
+      <span class="fc-kicker">CUSTOMER ACCOUNTS</span>
+      <h2>Registered users</h2>
+      <p>Browse and search customer account details.</p>
+    </div>
+    <a class="btn btn-fc-primary" href="{% url 'accounts:admin_user_list' %}">
+      View users <i class="bi bi-arrow-right" aria-hidden="true"></i>
+    </a>
+  </div>
+</section>
 {% endblock %}

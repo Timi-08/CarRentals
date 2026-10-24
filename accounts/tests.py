@@ -478,6 +478,30 @@ class AdminAccessTests(TestCase):
         self.assertEqual(len(page_one.context['page_obj']), 10)
         self.assertEqual(len(page_two.context['page_obj']), 3)
 
+    def test_user_list_search_matches_user_details_and_excludes_staff(self):
+        User.objects.create_user(
+            'searchable', 'findme@example.com', PASSWORD,
+            first_name='Searchable', last_name='Customer')
+        self.client.login(username='staffer', password=PASSWORD)
+
+        response = self.client.get(reverse('accounts:admin_user_list'), {'q': 'findme'})
+
+        self.assertEqual(response.context['page_obj'].paginator.count, 1)
+        self.assertContains(response, 'searchable')
+        self.assertNotContains(response, 'customer@example.com')
+        self.assertNotContains(response, 'staff@example.com')
+
+    def test_user_list_search_term_is_preserved_when_paginating(self):
+        for i in range(12):
+            User.objects.create_user(f'query{i}', f'query{i}@example.com', PASSWORD)
+        self.client.login(username='staffer', password=PASSWORD)
+
+        response = self.client.get(reverse('accounts:admin_user_list'), {'q': 'query', 'page': 2})
+
+        self.assertEqual(len(response.context['page_obj']), 2)
+        self.assertEqual(response.context['search_query'], 'query')
+        self.assertContains(response, 'q=query&amp;page=1')
+
     def test_admin_logout_requires_post(self):
         self.client.login(username='staffer', password=PASSWORD)
         response = self.client.get(reverse('accounts:admin_logout'))

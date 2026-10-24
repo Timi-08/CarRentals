@@ -504,6 +504,41 @@ html.no-motion [data-hero-in] { opacity: 1 !important; transform: none !importan
 .fc-stat .fc-stat-label { color: var(--fc-muted); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 0.12em; font-weight: 600; margin-top: 0.4rem; }
 .fc-stat .fc-stat-icon { position: absolute; right: 1.2rem; top: 1rem; font-size: 2.2rem; color: rgba(var(--fc-navy-rgb), 0.12); }
 
+/* ---------- Admin pages ---------- */
+.fc-admin-header { margin-bottom: 0; padding-bottom: 2.7rem; }
+.fc-admin-header .fc-kicker { color: #ff8790; }
+.fc-admin-page { padding-top: 2.25rem; padding-bottom: 1rem; }
+.fc-admin-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+.fc-admin-toolbar > form:not(.fc-admin-search) { margin: 0; }
+.fc-admin-search { display: flex; align-items: center; gap: 0.9rem; flex: 1 1 24rem; min-width: 0; padding: 0.45rem 0.55rem 0.45rem 1rem; border: 1px solid var(--fc-border); border-radius: 0.75rem; background: var(--fc-surface); box-shadow: var(--fc-shadow); }
+.fc-admin-search > i { color: var(--fc-muted); }
+.fc-admin-search .form-control { min-width: 0; border: 0; box-shadow: none; }
+.fc-admin-search .form-control:focus { box-shadow: none; }
+.fc-admin-section-link { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: 2.5rem; padding: 1.5rem 0; border-top: 1px solid var(--fc-border); border-bottom: 1px solid var(--fc-border); }
+.fc-admin-section-link h2 { margin: 0; font-size: 1.35rem; }
+.fc-admin-section-link p { margin: 0.35rem 0 0; color: var(--fc-muted); }
+.fc-admin-list-search { margin-bottom: 1.25rem; }
+.fc-admin-list-search .fc-filter-heading { align-items: center; margin-bottom: 0.9rem; }
+.fc-admin-result-count { color: var(--fc-muted); font-size: 0.88rem; }
+.fc-admin-search-fields { display: flex; align-items: center; gap: 0.65rem; }
+.fc-admin-search-fields .form-control { min-width: 0; min-height: 46px; }
+.fc-admin-search-fields .btn { white-space: nowrap; }
+.fc-admin-page .fc-table td a { overflow-wrap: anywhere; }
+@media (max-width: 767.98px) {
+  .fc-admin-toolbar { align-items: stretch; flex-direction: column; gap: 1rem; }
+  .fc-admin-toolbar > .btn, .fc-admin-toolbar > form:not(.fc-admin-search) .btn { width: 100%; }
+}
+@media (max-width: 575.98px) {
+  .fc-admin-page { padding-top: 1.5rem; }
+  .fc-admin-search { flex-wrap: wrap; }
+  .fc-admin-search .form-control { flex: 1; }
+  .fc-admin-search > .btn { width: 100%; }
+  .fc-admin-section-link { align-items: flex-start; flex-direction: column; }
+  .fc-admin-search-fields { align-items: stretch; flex-wrap: wrap; }
+  .fc-admin-search-fields .form-control { flex-basis: 100%; }
+  .fc-admin-search-fields .btn { flex: 1; }
+}
+
 /* ---------- Pagination ---------- */
 .pagination { gap: 0.35rem; }
 .pagination .page-link { color: var(--fc-navy); border: 1.5px solid var(--fc-border); border-radius: 50rem !important; min-width: 2.5rem; text-align: center; font-weight: 600; }

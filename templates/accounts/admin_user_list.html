@@ -1,16 +1,66 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Registered users</h1>
-<table>
-  <tr><th>Username</th><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr>
-  {% for u in page_obj %}
-  <tr>
-    <td>{{ u.username }}</td><td>{{ u.get_full_name }}</td>
-    <td>{{ u.email }}</td><td>{{ u.profile.phone }}</td><td>{{ u.date_joined|date:"d M Y" }}</td>
-  </tr>
-  {% empty %}<tr><td colspan="5">No users yet.</td></tr>{% endfor %}
-</table>
-{% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
-Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-{% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+<section class="fc-page-header fc-admin-header">
+  <div class="container">
+    <span class="fc-kicker">FAST CARS / ADMIN</span>
+    <h1>Registered users</h1>
+    <p>Search and review customer account details.</p>
+  </div>
+</section>
+
+<section class="container fc-admin-page">
+  <form class="fc-filter fc-admin-list-search" method="get">
+    <div class="fc-filter-heading">
+      <div>
+        <span class="fc-kicker">CUSTOMER ACCOUNTS</span>
+        <h2 class="h5 mb-0">Find a user</h2>
+      </div>
+      <span class="fc-admin-result-count">{{ page_obj.paginator.count }} result{{ page_obj.paginator.count|pluralize }}</span>
+    </div>
+    <div class="fc-admin-search-fields">
+      <label class="visually-hidden" for="user-search">Search registered users</label>
+      <input class="form-control" id="user-search" type="search" name="q" value="{{ search_query }}"
+             placeholder="Name, username, email or phone" autocomplete="off">
+      <button class="btn btn-fc-primary" type="submit"><i class="bi bi-search" aria-hidden="true"></i> Search</button>
+      {% if search_query %}<a class="btn btn-fc-outline" href="{% url 'accounts:admin_user_list' %}">Clear</a>{% endif %}
+    </div>
+  </form>
+
+  <div class="fc-table-wrap">
+    <table class="table fc-table">
+      <thead>
+        <tr><th scope="col">Username</th><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th><th scope="col">Joined</th></tr>
+      </thead>
+      <tbody>
+        {% for u in page_obj %}
+        <tr>
+          <td class="fw-semibold">{{ u.username }}</td>
+          <td>{{ u.get_full_name|default:"-" }}</td>
+          <td><a href="mailto:{{ u.email }}">{{ u.email|default:"-" }}</a></td>
+          <td>{{ u.profile.phone|default:"-" }}</td>
+          <td>{{ u.date_joined|date:"d M Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td class="text-center py-5" colspan="5">
+          {% if search_query %}No users match "{{ search_query }}".{% else %}No users yet.{% endif %}
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav class="mt-4" aria-label="User list pages">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?q={{ search_query|urlencode }}&amp;page={{ page_obj.previous_page_number }}" aria-label="Previous page"><i class="bi bi-arrow-left" aria-hidden="true"></i></a></li>
+      {% endif %}
+      <li class="page-item active" aria-current="page"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?q={{ search_query|urlencode }}&amp;page={{ page_obj.next_page_number }}" aria-label="Next page"><i class="bi bi-arrow-right" aria-hidden="true"></i></a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</section>
 {% endblock %}
