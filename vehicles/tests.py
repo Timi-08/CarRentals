@@ -4,6 +4,8 @@ Tests for the vehicles app (Person 2).
 Run them with:
     python manage.py test vehicles
 """
+
+# Vehicle tests cover catalog filtering, admin registration, and public listing behavior.
 import io
 import tempfile
 from decimal import Decimal
@@ -31,6 +33,7 @@ def tiny_image():
     return SimpleUploadedFile('car.png', buffer.getvalue(), content_type='image/png')
 
 
+# Core model checks for brand uniqueness, vehicle defaults, and validation rules.
 class ModelTests(TestCase):
     def test_brand_and_vehicle_strings(self):
         brand = Brand.objects.create(name='Toyota')
@@ -70,12 +73,14 @@ class ModelTests(TestCase):
             vehicle.full_clean()
 
 
+# Confirm the vehicle models are included in the admin site for staff management.
 class AdminRegistrationTests(TestCase):
     def test_models_are_registered_in_django_admin(self):
         self.assertIn(Brand, admin.site._registry)
         self.assertIn(Vehicle, admin.site._registry)
 
 
+# Vehicle listing tests exercise the search form, filters, and page boundaries.
 class CarListTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -154,6 +159,7 @@ class CarListTests(TestCase):
                 self.assertEqual(self.client.get(self.url, {'page': page}).status_code, 200)
 
 
+# Pagination checks ensure the catalog remains usable across several vehicle pages.
 class PaginationTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -178,6 +184,7 @@ class PaginationTests(TestCase):
         self.assertContains(response, '?q=car&amp;page=2')
 
 
+# Detail-page tests confirm vehicle metadata renders correctly and missing items return 404.
 class CarDetailTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -210,6 +217,7 @@ class CarDetailTests(TestCase):
             self.assertContains(response, vehicle.image.url)
 
 
+# Home-page tests verify the featured vehicle selection matches the site's rules.
 class HomePageTests(TestCase):
     @classmethod
     def setUpTestData(cls):

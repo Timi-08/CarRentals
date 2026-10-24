@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Testimonial
 
 
+# Admin controls for approving or hiding customer reviews.
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
     list_display = ('user', 'short_message', 'is_active', 'created_at')

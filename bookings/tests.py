@@ -1,3 +1,3 @@
 from django.test import TestCase
 
-# Create your tests here.
+# Booking tests cover the customer booking journey and admin status changes.

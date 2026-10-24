@@ -7,6 +7,7 @@ from .forms import ContactForm, SubscribeForm
 from .models import ContactDetails, PageContent
 
 
+# Contact page pre-fills the form with the logged-in user's details when available.
 def contact_us(request):
     """Contact Us page: FAST CARS details plus the message form."""
     initial = {}

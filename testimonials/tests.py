@@ -5,13 +5,14 @@ from django.urls import reverse
 from .models import Testimonial
 
 
-# Faster password hashing, for tests only
+# Faster password hashing keeps the testimonial and auth checks quick in test runs.
 @override_settings(PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'])
 class TestimonialTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('alice', password='pass12345!')
         self.admin = User.objects.create_superuser('boss', 'b@x.com', 'pass12345!')
 
+    # Guests must log in before they can submit a review.
     def test_guest_redirected_to_login(self):  # TST-01
         url = reverse('testimonials:create')
         resp = self.client.get(url)

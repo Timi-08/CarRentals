@@ -8,6 +8,7 @@ VEHICLES_PER_PAGE = 9
 FEATURED_ON_HOME = 6
 
 
+# Only show the short, highlighted set that the admin has marked as featured.
 def featured_vehicles():
     """Available vehicles the admin marked as featured (used by the home page)."""
     return (Vehicle.objects.filter(is_featured=True, is_available=True)
@@ -24,6 +25,7 @@ def car_list(request):
     form = VehicleFilterForm(request.GET or None)
     vehicles = Vehicle.objects.select_related('brand')
     if form.is_valid():
+        # Apply any user-selected filters before paging the result set.
         vehicles = form.filter(vehicles)
     page_obj = Paginator(vehicles, VEHICLES_PER_PAGE).get_page(request.GET.get('page'))
 
@@ -38,5 +40,6 @@ def car_list(request):
 
 
 def car_detail(request, pk):
+    # Fetch one vehicle with its brand data so the detail template can display full information.
     vehicle = get_object_or_404(Vehicle.objects.select_related('brand'), pk=pk)
     return render(request, 'vehicles/car_detail.html', {'vehicle': vehicle})

@@ -7,6 +7,7 @@ from .forms import TestimonialForm
 from .models import Testimonial
 
 
+# Only approved testimonials are shown publicly, keeping the review feed trustworthy.
 def testimonial_list(request):
     """Anyone can view active testimonials only (TST-02), paginated (NFR-04)."""
     qs = Testimonial.objects.filter(is_active=True).select_related('user')
@@ -19,6 +20,7 @@ def testimonial_create(request):
     """Logged-in customers post a testimonial (TST-01). Guests go to login."""
     form = TestimonialForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
+        # Associate the review with the logged-in customer before saving it for approval.
         t = form.save(commit=False)
         t.user = request.user
         t.save()

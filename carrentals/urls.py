@@ -5,6 +5,7 @@ from vehicles.views import home
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Root URL configuration for the car rental site and all app-specific routes.
 urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('', home, name='home'),

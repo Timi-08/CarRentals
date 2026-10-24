@@ -5,6 +5,8 @@ and contact details.
 Run them with:
     python manage.py test contact
 """
+
+# Contact tests validate form submission, subscriptions, and admin-managed content pages.
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -15,6 +17,7 @@ from .models import Contact, ContactDetails, PageContent, Subscriber
 QUERY = {'name': 'Ada', 'email': 'ada@example.com', 'message': 'Do you rent vans?'}
 
 
+# Page-level checks for the public contact form and its prefilled user data.
 class ContactUsTests(TestCase):
     url = reverse('contact:contact_us')
 
@@ -64,6 +67,7 @@ class ContactUsTests(TestCase):
         self.assertEqual(self.client.get(self.url).status_code, 200)
 
 
+# Subscribe tests confirm duplicates are blocked and the redirect flow is safe.
 class SubscribeTests(TestCase):
     url = reverse('contact:subscribe')
 
@@ -114,6 +118,7 @@ class SubscribeTests(TestCase):
         self.assertRedirects(response, reverse('home'))
 
 
+# Test the editable static page content used for informational sections.
 class PageContentTests(TestCase):
     def test_page_shows_its_title_and_text(self):
         PageContent.objects.create(slug='about-us', title='About Us', body='We rent cars.\n\nSince 2020.')
@@ -142,6 +147,7 @@ class PageContentTests(TestCase):
         self.assertNotContains(response, '<script>alert(1)</script>')
 
 
+# The singleton contact-details model should behave like a single global record.
 class ContactDetailsTests(TestCase):
     def test_load_creates_the_single_row(self):
         details = ContactDetails.load()
@@ -162,6 +168,7 @@ class ContactDetailsTests(TestCase):
         self.assertFalse(model_admin.has_add_permission(request))
 
 
+# Admin registration checks ensure the staff-facing contact models are all exposed correctly.
 class AdminRegistrationTests(TestCase):
     def test_models_are_registered_in_django_admin(self):
         for model in (Contact, Subscriber, PageContent, ContactDetails):

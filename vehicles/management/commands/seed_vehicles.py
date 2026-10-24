@@ -7,6 +7,7 @@ from vehicles.models import Brand, Vehicle
 from seed_data import BRANDS, VEHICLE_IMAGES, VEHICLES
 
 
+# Seed the database with demo cars and the associated brand catalog used by the app.
 class Command(BaseCommand):
     help = ('Add the sample brands and vehicles to the database. '
             'Safe to run more than once: existing records are left untouched.')
@@ -16,6 +17,7 @@ class Command(BaseCommand):
         brands = {}
         new_brands = 0
         for name in BRANDS:
+            # Ensure each brand exists once, even if the command is run repeatedly.
             brand, created = Brand.objects.get_or_create(name=name)
             brands[name] = brand
             new_brands += created
@@ -38,6 +40,7 @@ class Command(BaseCommand):
             )
             new_vehicles += created
             if not created and image_path and not vehicle.image:
+                # Backfill missing images for any vehicles already imported manually.
                 vehicle.image = image_path
                 vehicle.save(update_fields=['image'])
 

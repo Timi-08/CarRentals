@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Brand, Vehicle
 
 
+# Brand admin keeps the fleet sorted and makes total counts visible.
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
     list_display = ('name', 'vehicle_count')
@@ -13,6 +14,7 @@ class BrandAdmin(admin.ModelAdmin):
         return obj.vehicles.count()
 
 
+# Vehicle admin gives staff a quick overview of stock, pricing, and visibility.
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ('name', 'brand', 'price_per_day', 'seats', 'fuel_type',

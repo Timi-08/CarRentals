@@ -9,17 +9,19 @@ from .forms import BookingForm
 from .models import Booking
 
 
-@login_required  
+@login_required
+# Users are taken to a prefilled form when they choose a vehicle from a listing page.
 def create_booking(request):
     initial = {}
     if request.GET.get('vehicle'):
-        initial['vehicle'] = request.GET['vehicle']  
+        initial['vehicle'] = request.GET['vehicle']
 
     form = BookingForm(request.POST or None, initial=initial)
     if request.method == 'POST' and form.is_valid():
+        # Save the booking as a draft-like Pending record, then attach the logged-in customer.
         booking = form.save(commit=False)
-        booking.customer = request.user     
-        booking.status = Booking.PENDING    
+        booking.customer = request.user
+        booking.status = Booking.PENDING
         booking.save()
         messages.success(request, "Booking submitted. Waiting for confirmation.")
         return redirect('bookings:confirmation', pk=booking.pk)
@@ -35,6 +37,7 @@ def booking_confirmation(request, pk):
 @login_required
 def my_bookings(request):
     """BKG-10: a customer sees only their own bookings (paginated, NFR-04)."""
+    # Scope the query to the logged-in user so they never see another customer's bookings.
     qs = Booking.objects.filter(customer=request.user).select_related('vehicle')
     page_obj = Paginator(qs, 10).get_page(request.GET.get('page'))
     return render(request, 'bookings/my_bookings.html', {'bookings': page_obj})
@@ -76,10 +79,12 @@ def admin_update_booking(request, pk, action):
     if booking.status != Booking.PENDING:
         messages.error(request, "Only Pending bookings can be changed.")
     elif action == 'confirm':
+        # Confirming a booking moves it into the active rental phase.
         booking.status = Booking.CONFIRMED
         booking.save()
         messages.success(request, f"Booking #{booking.pk} confirmed.")
     elif action == 'cancel':
+        # A cancellation records the booking as closed and tells the customer it was rejected.
         booking.status = Booking.CANCELLED
         booking.save()
         messages.success(request, f"Booking #{booking.pk} cancelled.")

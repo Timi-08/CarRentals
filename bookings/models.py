@@ -6,6 +6,7 @@ from django.utils import timezone
 
 class Booking(models.Model):
     """A customer's request to rent one vehicle for a date range."""
+    # These are the statuses that prevent a vehicle from being offered again until the booking changes.
     PENDING = 'Pending'
     CONFIRMED = 'Confirmed'
     CANCELLED = 'Cancelled'
@@ -65,6 +66,7 @@ class Booking(models.Model):
             if self._state.adding and not self.vehicle.is_available:
                 errors['vehicle'] = "This vehicle is not available for booking."
 
+            # Prevent overlapping bookings for the same vehicle on the same dates.
             if (self.pickup_date and self.return_date
                     and 'return_date' not in errors
                     and self.status in self.BLOCKING_STATUSES):
@@ -82,6 +84,7 @@ class Booking(models.Model):
 
     def save(self, *args, **kwargs):
         """BKG-06: total price = days x price per day."""
+        # Recalculate the rental total whenever a booking is saved with valid dates.
         if self.pickup_date and self.return_date and self.vehicle_id:
             self.total_price = self.days * self.vehicle.price_per_day
         super().save(*args, **kwargs)

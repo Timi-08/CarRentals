@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from .forms import RegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile
 
+# New users are created here; after registration they are logged in immediately.
 def register(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -40,6 +41,7 @@ def profile(request):
 
 @login_required
 def profile_edit(request):
+    # Keep the user and profile forms in sync so both authentication and contact details update together.
     u_form = UserUpdateForm(request.POST or None, instance=request.user)
     profile, _ = Profile.objects.get_or_create(user=request.user)
     p_form = ProfileUpdateForm(request.POST or None, instance=profile)
@@ -74,11 +76,13 @@ def _count(app_label, model_name):
     try:
         return apps.get_model(app_label, model_name).objects.count()
     except LookupError:
+        # Some dashboard widgets are shown before the model is available in this environment.
         return 0
 
 
 @staff_member_required(login_url='accounts:admin_login')
 def admin_dashboard(request):
+    # Show a quick summary of the site activity that staff users are allowed to monitor.
     context = {
         'users_count': User.objects.filter(is_staff=False).count(),
         'bookings_count': _count('bookings', 'Booking'),
@@ -90,6 +94,7 @@ def admin_dashboard(request):
 
 @staff_member_required(login_url='accounts:admin_login')
 def admin_user_list(request):
+    # Staff can search across core user fields and profile phone numbers.
     users = User.objects.filter(is_staff=False).select_related('profile').order_by('-date_joined')
     search_query = request.GET.get('q', '').strip()
     if search_query:

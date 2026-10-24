@@ -5,11 +5,13 @@ Prices are example daily rental rates in naira. Change them in the admin
 to match what FAST CARS really charges.
 """
 
+# Start with the dealership's brand list so the app can group vehicles consistently.
 BRANDS = [
     'Toyota', 'Honda', 'Lexus', 'Mercedes-Benz', 'Hyundai',
     'Kia', 'Nissan', 'Ford', 'Peugeot', 'Volkswagen',
 ]
 
+# Each record stores the vehicle brand, model, pricing, seating, fuel type, and sale status.
 # (brand, name, price per day, seats, fuel type, available, featured, description)
 VEHICLES = [
     # Toyota
@@ -93,6 +95,7 @@ VEHICLES = [
      'Practical compact SUV with a solid, well-built feel.'),
 ]
 
+# Map vehicles to their media files so the site can display images without adding them manually.
 VEHICLE_IMAGES = {
     ('Ford', 'Explorer'): 'vehicles/FordExplorer.png',
     ('Ford', 'Ranger'): 'vehicles/FordRanger.avif',

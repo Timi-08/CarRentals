@@ -6,6 +6,7 @@ from . import views
 
 app_name = 'accounts'
 
+# Public and staff account routes used throughout the site.
 urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(

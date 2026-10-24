@@ -7,6 +7,7 @@ from urllib.parse import urlsplit
 
 from .models import Profile
 
+# Use a fast password hasher so account-related tests stay lightweight and stable.
 @override_settings(PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'])
 class TestCase(DjangoTestCase):
     pass
@@ -14,6 +15,7 @@ class TestCase(DjangoTestCase):
 PASSWORD = 'Str0ng-Pass!234'
 NEW_PASSWORD = 'An0ther-Str0ng!567'
 
+# Shared helper data for tests that exercise the registration flow.
 def registration_data(**overrides):
     """Valid registration form data; override any field per test."""
     data = {
@@ -33,6 +35,7 @@ def is_logged_in(client):
     return SESSION_KEY in client.session
 
 
+# Cover the full public registration flow, including validation and redirect behavior.
 class RegistrationTests(TestCase):
     def test_register_page_loads(self):
         response = self.client.get(reverse('accounts:register'))
@@ -123,6 +126,7 @@ class RegistrationTests(TestCase):
         self.assertRedirects(response, reverse('home'))
 
 
+# Ensure profile creation stays automatic, even after repeated user saves.
 class ProfileSignalTests(TestCase):
     def test_every_new_user_gets_a_profile(self):
         user = User.objects.create_user('someone', 'someone@example.com', PASSWORD)
@@ -140,6 +144,7 @@ class ProfileSignalTests(TestCase):
         self.assertEqual(Profile.objects.count(), 0)
 
 
+# Authentication tests cover login, logout, and the redirection safeguards around them.
 class LoginLogoutTests(TestCase):
     @classmethod
     def setUpTestData(cls):

@@ -1,3 +1,5 @@
+"""Vehicle catalog rules and inventory information for the rental app."""
+
 from decimal import Decimal
 
 from django.core.validators import MinValueValidator
@@ -8,6 +10,7 @@ class Brand(models.Model):
     """The make of a vehicle, for example Toyota."""
     name = models.CharField(max_length=100, unique=True)
 
+    # Sort brands alphabetically so lists and filters stay predictable.
     class Meta:
         ordering = ['name']
 
@@ -16,6 +19,7 @@ class Brand(models.Model):
 
 
 class Vehicle(models.Model):
+    # Supported fuel options used in filters, forms, and the booking engine.
     PETROL = 'petrol'
     DIESEL = 'diesel'
     ELECTRIC = 'electric'
@@ -42,6 +46,7 @@ class Vehicle(models.Model):
         default=False, help_text='Show this vehicle on the home page.')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Present vehicles in a consistent, brand-first order for all listing screens.
     class Meta:
         ordering = ['brand__name', 'name', 'pk']
 

@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Booking
 
 
+# Admin actions for managing rental requests without leaving the Django admin area.
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer', 'vehicle', 'pickup_date',
